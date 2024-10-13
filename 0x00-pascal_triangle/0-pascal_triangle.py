@@ -2,7 +2,6 @@
 
 """
 This module contains a function to generate Pascal's Triangle
-up to a specified number of rows.
 """
 
 
