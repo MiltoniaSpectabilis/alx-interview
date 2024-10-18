@@ -10,15 +10,17 @@ def minOperations(n):
     Returns the minimum number of operations (Copy All and Paste)
     to reach n 'H' characters.
     """
-    if n < 1:
+
+    if n <= 1:
         return 0
+
     operations = 0
-    current_h = 1
-    while current_h < n:
-        if n % current_h == 0:
-            operations += 1 + (n // current_h - 1)
-            break
-        else:
-            operations += 1
-            current_h += 1
+    factor = 2
+
+    while n > 1:
+        while n % factor == 0:
+            operations += factor
+            n //= factor
+        factor += 1
+
     return operations
