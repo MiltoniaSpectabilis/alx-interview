@@ -1,32 +1,31 @@
 #!/usr/bin/python3
 
-""" a UTF-8 Validation function """
+""" Module for UTF-8 validation """
 
 
 def validUTF8(data):
-    """ Validate UTF-8 """
-    def get_byte_count(byte):
-        if byte >> 7 == 0:
-            return 1
-        elif byte >> 5 == 0b110:
-            return 2
-        elif byte >> 4 == 0b1110:
-            return 3
-        elif byte >> 3 == 0b11110:
-            return 4
-        return -1
+    """ Determines if a given data set represents a valid UTF-8 encoding. """
 
-    def is_valid_following_byte(byte):
-        """ Check if a byte is a valid UTF-8 following byte """
-        return byte >> 6 == 0b10
+    n_bytes = 0
 
-    i = 0
-    while i < len(data):
-        byte_count = get_byte_count(data[i])
-        if byte_count == -1:
-            return False
-        for j in range(1, byte_count):
-            if i + j >= len(data) or not is_valid_following_byte(data[i + j]):
+    mask1 = 1 << 7
+    mask2 = 1 << 6
+
+    for num in data:
+        num = num & 255
+        if n_bytes == 0:
+            mask = mask1
+            while num & mask:
+                n_bytes += 1
+                mask = mask >> 1
+            if n_bytes == 0:
+                continue
+            if n_bytes == 1 or n_bytes > 4:
                 return False
-        i += byte_count
-    return True
+        else:
+            if not (num & mask1 and not (num & mask2)):
+                return False
+
+        n_bytes -= 1
+
+    return n_bytes == 0
