@@ -10,7 +10,7 @@ const requestPromise = util.promisify(request);
 const BASE_URL = 'https://swapi.dev/api';
 
 // Function to get character name from URL
-async function getCharacterName(url) {
+async function getCharacterName (url) {
   try {
     const response = await requestPromise(url);
     const character = JSON.parse(response.body);
@@ -22,7 +22,7 @@ async function getCharacterName(url) {
 }
 
 // Main function to get and print all characters
-async function printMovieCharacters(movieId) {
+async function printMovieCharacters (movieId) {
   try {
     // Get movie data
     const movieUrl = `${BASE_URL}/films/${movieId}/`;
