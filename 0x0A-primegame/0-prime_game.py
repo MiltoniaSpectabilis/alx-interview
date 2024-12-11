@@ -5,40 +5,47 @@ Prime Game
 
 def isWinner(x, nums):
     """
-    Determines the winner of a prime game.
-    """
+    Determine the winner of the Prime Game.
 
-    def is_prime(num):
-        """Checks if a number is prime."""
-        if num < 2:
+    :param x: Number of rounds
+    :param nums: Array of integers representing the maximum number for each round
+    :return: Name of the player that won the most rounds, or None if it's a tie
+    """
+    def is_prime(n):
+        """Check if a number is prime."""
+        if n <= 1:
             return False
-        for i in range(2, int(num**0.5) + 1):
-            if num % i == 0:
+        if n <= 3:
+            return True
+        if n % 2 == 0 or n % 3 == 0:
+            return False
+        i = 5
+        while i * i <= n:
+            if n % i == 0 or n % (i + 2) == 0:
                 return False
+            i += 6
         return True
 
     def get_primes(n):
-        """Generates a list of prime numbers up to n."""
+        """Get all prime numbers up to n."""
         primes = []
         for i in range(2, n + 1):
             if is_prime(i):
                 primes.append(i)
         return primes
 
-    def solve_round(n):
-        """Solves a single round of the game."""
-        if n == 1:
-            return False  # Ben wins if n is 1
-
+    def can_win(n):
+        """Determine if the first player can win given n."""
         primes = get_primes(n)
-
-        return len(primes) % 2 != 0  # Maria wins if the number of primes is odd
+        if not primes:
+            return False
+        return len(primes) % 2 == 1
 
     maria_wins = 0
     ben_wins = 0
 
     for n in nums:
-        if solve_round(n):
+        if can_win(n):
             maria_wins += 1
         else:
             ben_wins += 1
